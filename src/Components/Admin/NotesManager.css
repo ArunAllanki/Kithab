@@ -1,0 +1,91 @@
+NotesManager.css
+.notes-manager-container {
+  padding: 1.5rem;
+}
+
+.filters {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.filters select,
+.filters button {
+  padding: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.table-container {
+  margin-top: 1rem;
+  overflow-x: auto;
+}
+
+.table-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-container th,
+.table-container td {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.delete-btn {
+  background: crimson;
+  color: white;
+  padding: 0.3rem 0.7rem;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.delete-btn:hover {
+  background: darkred;
+}
+
+.error-msg {
+  color: red;
+  margin-top: 0.5rem;
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: white;
+  padding: 1.25rem;
+  border-radius: 8px;
+  width: 350px;
+  text-align: center;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.modal-actions button {
+  padding: 0.5rem 0.75rem;
+}
+
+.delete-confirm-btn {
+  background: crimson;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}

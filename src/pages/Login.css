@@ -1,0 +1,283 @@
+/* Global body */
+:root {
+  --main-gradient: linear-gradient(#fab458,#e29127, black);
+
+  /* background-image: linear-gradient(#ee9b2f, black); */
+
+  /* background-position: top left; */
+  /* background-image: linear-gradient(45#ec9f3a, black); */
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  font-family: "Roboto", sans-serif;
+  background: var(--main-gradient); /* apply gradient to body/html */
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: 1;
+}
+
+@keyframes move {
+  100% {
+    transform: translate3d(0, 0, 1px) rotate(360deg);
+  }
+}
+
+.background {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  /* background: var(--sec); */
+  overflow: hidden;
+  z-index: -1; /* ensures background stays behind form */
+}
+
+.ball {
+  position: absolute;
+  width: 20vmin;
+  height: 20vmin;
+  border-radius: 50%;
+  backface-visibility: hidden;
+  animation: move linear infinite;
+}
+
+.ball:nth-child(odd) {
+  color: #06ade8;
+}
+.ball:nth-child(even) {
+  color: grey;
+}
+
+/* Ball positions (your original setup) */
+.ball:nth-child(1) {
+  top: 77%;
+  left: 88%;
+  animation-duration: 40s;
+  animation-delay: -3s;
+  transform-origin: 16vw -2vh;
+  box-shadow: 40vmin 0 5.7vmin currentColor;
+}
+.ball:nth-child(2) {
+  top: 42%;
+  left: 2%;
+  animation-duration: 53s;
+  animation-delay: -29s;
+  transform-origin: -19vw 21vh;
+  box-shadow: -40vmin 0 5.1vmin currentColor;
+}
+.ball:nth-child(3) {
+  top: 28%;
+  left: 18%;
+  animation-duration: 49s;
+  animation-delay: -8s;
+  transform-origin: -22vw 3vh;
+  box-shadow: 40vmin 0 5.2vmin currentColor;
+}
+.ball:nth-child(4) {
+  top: 50%;
+  left: 79%;
+  animation-duration: 26s;
+  animation-delay: -21s;
+  transform-origin: -17vw -6vh;
+  box-shadow: 40vmin 0 5.2vmin currentColor;
+}
+.ball:nth-child(5) {
+  top: 46%;
+  left: 15%;
+  animation-duration: 36s;
+  animation-delay: -40s;
+  transform-origin: 4vw 0vh;
+  box-shadow: -40vmin 0 5.9vmin currentColor;
+}
+.ball:nth-child(6) {
+  top: 77%;
+  left: 16%;
+  animation-duration: 31s;
+  animation-delay: -10s;
+  transform-origin: 18vw 4vh;
+  box-shadow: 40vmin 0 5.1vmin currentColor;
+}
+.ball:nth-child(7) {
+  top: 22%;
+  left: 17%;
+  animation-duration: 55s;
+  animation-delay: -6s;
+  transform-origin: 1vw -23vh;
+  box-shadow: -40vmin 0 5.7vmin currentColor;
+}
+.ball:nth-child(8) {
+  top: 41%;
+  left: 47%;
+  animation-duration: 43s;
+  animation-delay: -28s;
+  transform-origin: 25vw -3vh;
+  box-shadow: 40vmin 0 5.1vmin currentColor;
+}
+
+/* Wrapper */
+.login-wrapper {
+  display: flex;
+  min-width: 100vw;
+  min-height: 100vh;
+  flex-direction: row;
+}
+
+.logo {
+  width: 40%;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+/* Left side: form */
+.form-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Form styling */
+.form {
+  background-color: white;
+  box-shadow: 0 8px 15px 0 rgba(103, 104, 109, 0.37);
+  backdrop-filter: blur(10px);
+  padding: 3vh 3vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: medium;
+  border-radius: 15px;
+  max-width: 350px;
+  width: 100%;
+  margin: 10vh;
+}
+
+/* Tabs */
+.form-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+}
+
+.tab {
+  cursor: pointer;
+  position: relative;
+  text-align: center;
+  flex: 1;
+  padding-bottom: 5px;
+}
+
+.tab.selected::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 20%;
+  width: 60%;
+  height: 3px;
+  background-color: var(--third-color);
+  border-radius: 2px;
+}
+
+/* Inputs & dropdown */
+input,
+select {
+  background: var(--bg-color);
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 2vh;
+  font-size: medium;
+  width: 100%; /* ensures same width */
+  border: none;
+  outline: none;
+  color: #000;
+  box-sizing: border-box;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* Dropdown with custom arrow */
+select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px 16px;
+  padding-right: 2rem;
+}
+
+/* Validation error messages */
+.error {
+  color: red;
+  font-size: 0.85rem;
+  margin: -10px 0 10px;
+  align-self: flex-start;
+}
+
+/* Button */
+button {
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: var(--third-color);
+  color: white;
+  font-size: large;
+  font-weight: bold;
+  width: 100%;
+}
+
+/* Para text */
+.para {
+  font-size: medium;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+/* Illustration */
+.illustration {
+  flex: 1;
+  background-image: url("../Assets/ReadingBookBlue.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .login-wrapper {
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .form-container,
+  .illustration {
+    flex: none;
+    width: 100%;
+    height: auto;
+  }
+
+  .form {
+    font-size: small;
+    padding: 5vh 5vw;
+    max-width: 350px;
+    margin: 5vh 10vw;
+  }
+
+  .illustration {
+    height: 40vh;
+  }
+
+  .form-tabs {
+    gap: 1rem;
+  }
+}

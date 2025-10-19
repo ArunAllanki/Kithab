@@ -1,0 +1,313 @@
+/* ==== Reset & Basics ==== */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial;
+}
+
+.SD-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.dashboard-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 24px;
+  gap: 24px;
+  scrollbar-width: none;
+}
+.dashboard-wrapper::-webkit-scrollbar {
+  display: none;
+}
+.dashboard-wrapper {
+  -ms-overflow-style: none;
+}
+
+/* ==== Parent Stack for uniform width ==== */
+.content-stack {
+  width: 90%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+/* ==== Glass Sections ==== */
+.search-section,
+.results-section {
+  width: 100%;
+  border-radius: 16px;
+  background: white;
+  /* backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgb(39 35 35 / 38%); */
+  /* background: rgb(120 120 120 / 34%); */
+
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22);
+  box-sizing: border-box;
+  transition: all 420ms cubic-bezier(0.2, 0.9, 0.2, 1);
+  padding: 20px 24px;
+}
+
+/* Search Section */
+.search-title {
+  margin: 0 0 12px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #0f172a;
+}
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.filter-item {
+  flex: 1 1 calc(50% - 12px);
+  min-width: 180px;
+}
+.filters select,
+.get-btn,
+.download-all-btn {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  /* background: rgba(255, 255, 255, 0.55); */
+  
+  font-size: 14px;
+  color: #1b2330;
+  backdrop-filter: blur(6px);
+  box-sizing: border-box;
+}
+
+/* ==== Get Button Wrapper ==== */
+.get-btn-wrapper {
+  display: flex;
+  justify-content: flex-end; /* Right aligned on wide screens */
+  width: 100%;
+  margin-top: 12px;
+}
+
+
+
+/* Responsive adjustment: center on smaller screens */
+@media (max-width: 768px) {
+  .get-btn-wrapper {
+    justify-content: center;
+  }
+}
+
+/* Get Button */
+.get-btn {
+  cursor: pointer;
+  font-weight: 700;
+  max-width: 200px;
+  background: var(--third-color, #0073e6);
+  color: #fff;
+  border: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 44px;
+  border-radius: 10px;
+  transition: background-color 180ms ease, opacity 180ms ease,
+    transform 180ms ease;
+}
+.get-btn:hover {
+  background: #098ebf;
+  transform: translateY(-1px);
+}
+.get-btn[disabled] {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Spinner inside buttons */
+.btn-spinner {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Results Section */
+.results-section {
+  width: 100%;
+  max-height: 0;
+  padding: 0 24px;
+  overflow: hidden;
+  transform: translateY(-6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: max-height 480ms cubic-bezier(0.2, 0.9, 0.2, 1),
+    padding 380ms cubic-bezier(0.2, 0.9, 0.2, 1), opacity 320ms ease,
+    transform 360ms cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+.results-section.open {
+  max-height: 2200px;
+  padding: 24px;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.results-inner {
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 300ms ease, transform 300ms ease;
+}
+.results-section.open .results-inner {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 80ms;
+}
+
+.results-title {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  color: #0f172a;
+  font-weight: 600;
+}
+.no-results {
+  color: #475569;
+  margin: 10px 0 0 0;
+}
+
+/* Notes Grid */
+.notes-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  width: 100%;
+}
+.notes-list > li {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+}
+
+/* Download All */
+.download-all-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+.download-all-btn {
+  cursor: pointer;
+  font-weight: 700;
+  width: 30%;
+  max-width: 200px;
+  background: var(--third-color, #0073e6);
+  color: #fff;
+  border: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 44px;
+  border-radius: 10px;
+  transition: background-color 180ms ease, opacity 180ms ease;
+}
+.download-all-btn:hover {
+  background: #098ebf;
+}
+.download-all-btn[disabled] {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.download-all-btn .btn-spinner {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  animation: spin 0.9s linear infinite;
+}
+
+/* ==== Carousel ==== */
+.swiper {
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.swiper-slide img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+/* Carousel arrows */
+.swiper-button-prev,
+.swiper-button-next {
+  color: #fff;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.3);
+  top: 50%;
+  transform: translateY(-50%);
+}
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 14px;
+}
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* ==== Responsive Adjustments ==== */
+@media (max-width: 920px) {
+  .filter-item {
+    flex: 1 1 calc(50% - 12px);
+  }
+}
+@media (max-width: 768px) {
+  .notes-list {
+    grid-template-columns: 1fr;
+  }
+  .filter-item {
+    flex: 1 1 100%;
+  }
+  .get-btn,
+  .download-all-btn {
+    width: 100%;
+  }
+}
+@media (max-width: 560px) {
+  .filter-item {
+    flex: 1 1 100%;
+  }
+  .get-btn,
+  .download-all-btn {
+    width: 100%;
+  }
+}

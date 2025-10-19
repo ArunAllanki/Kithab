@@ -1,0 +1,203 @@
+/* =============================
+   Admin Dashboard Layout
+============================= */
+.admin-dashboard {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: #f4f5fa;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
+}
+
+/* =============================
+   Sidebar
+============================= */
+.sidebar {
+  width: 260px;
+  background-color: #1f1f2e;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar-logo {
+  width: 70%;
+  margin-left: 15%;
+  filter: invert();
+}
+
+.sidebar-title {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.sidebar-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-list > li {
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.sidebar-list > li:hover {
+  background-color: #2a2a3d;
+}
+
+.active-section {
+  background-color: #2a2a3d;
+}
+
+/* Sublist */
+.sidebar-sublist {
+  list-style: none;
+  padding-left: 20px;
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-sublist > li {
+  padding: 6px 10px;
+  font-size: 0.95rem;
+  color: #ccc;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border-radius: 4px;
+}
+
+.sidebar-sublist > li.active {
+  color: #fff;
+  background-color: #3b3b5a;
+}
+
+.sidebar-sublist > li:hover {
+  color: #fff;
+  background-color: #2f2f4b;
+}
+
+/* Logout */
+.sidebar-logout {
+  margin-top: auto;
+  padding: 12px 20px;
+  background-color: #ff4d4f;
+  color: #fff;
+  text-align: center;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
+  width: 70%;
+  margin-left: 8%;
+}
+
+.sidebar-logout:hover {
+  background-color: #ff7875;
+}
+
+/* =============================
+   Dashboard Content
+============================= */
+.dashboard-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background-color: #f9f9fb;
+  padding: 2rem 2.5rem;
+  box-sizing: border-box;
+  width: calc(100% - 260px);
+}
+
+/* Optional sticky header section */
+.dashboard-header {
+  position: sticky;
+  top: 0;
+  background: #f9f9fb;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+  z-index: 10;
+}
+
+.dashboard-header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2d2d3a;
+  margin: 0;
+}
+
+/* Card or content wrapper style (optional but good UI) */
+.dashboard-card {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+}
+
+/* Scrollbar */
+.dashboard-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dashboard-content::-webkit-scrollbar-track {
+  background: #f4f5fa;
+}
+
+.dashboard-content::-webkit-scrollbar-thumb {
+  background-color: #bcbcbc;
+  border-radius: 4px;
+}
+
+.dashboard-content::-webkit-scrollbar-thumb:hover {
+  background-color: #a0a0a0;
+}
+
+/* =============================
+   Responsive
+============================= */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .dashboard-content {
+    width: calc(100% - 200px);
+    padding: 1.5rem;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-dashboard {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .dashboard-content {
+    width: 100%;
+    padding: 1rem;
+  }
+}
