@@ -198,7 +198,7 @@ const Login = () => {
             <>
               <input
                 type="text"
-                placeholder="RollNo / EmployeeID / Admin ID"
+                placeholder="Login Id"
                 value={id}
                 onChange={(e) => setId(e.target.value)}
                 required
