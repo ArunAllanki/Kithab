@@ -18,6 +18,7 @@ const Login = () => {
   const [branch, setBranch] = useState("");
   const [invalidLogin, setInvalidLogin] = useState(false);
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false); // 🆕 added
 
   useEffect(() => {
     if (!user) return;
@@ -56,6 +57,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setInvalidLogin(false);
+    setLoading(true); // 🆕 start loading
 
     try {
       if (isLogin) {
@@ -63,11 +65,15 @@ const Login = () => {
         if (!result.success) {
           setInvalidLogin(true);
           clearFields();
+          setLoading(false); // 🆕 stop loading
           return;
         }
         // navigation handled by useEffect after user is set
       } else {
-        if (!validateRegister()) return;
+        if (!validateRegister()) {
+          setLoading(false); // 🆕 stop loading if invalid
+          return;
+        }
 
         const res = await fetch(
           `${process.env.REACT_APP_BACKEND_URL.replace(
@@ -100,6 +106,8 @@ const Login = () => {
       console.error("[Login] submit error:", err);
       setInvalidLogin(true);
       clearFields();
+    } finally {
+      setLoading(false); // 🆕 always stop loading
     }
   };
 
@@ -216,10 +224,37 @@ const Login = () => {
           {invalidLogin && isLogin && (
             <p className="para error">Invalid login credentials !!</p>
           )}
-          <button type="submit">{isLogin ? "Login" : "Register"}</button>
+
+          <button type="submit" disabled={loading}>
+            {loading ? (
+              <span
+                style={{
+                  display: "inline-block",
+                  width: "16px",
+                  height: "16px",
+                  border: "2px solid #fff",
+                  borderTop: "2px solid transparent",
+                  borderRadius: "50%",
+                  animation: "spin 0.7s linear infinite",
+                }}
+              />
+            ) : isLogin ? (
+              "Login"
+            ) : (
+              "Register"
+            )}
+          </button>
         </form>
       </div>
       <div className="illustration" />
+
+      {/* 🆕 Inline spinner keyframes (no CSS file edit needed) */}
+      <style>
+        {`@keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }`}
+      </style>
     </div>
   );
 };

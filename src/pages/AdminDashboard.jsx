@@ -19,7 +19,7 @@ const AdminDashboard = () => {
   // Redirect if token invalid or user not admin
   useEffect(() => {
     if (!token || user?.role !== "admin") {
-      logout();      // clear localStorage
+      logout(); // clear localStorage
       navigate("/"); // safe redirect inside <Router>
     }
   }, [token, user, logout, navigate]);
@@ -75,7 +75,9 @@ const AdminDashboard = () => {
             <ul className="sidebar-sublist">
               <li
                 className={activeSubsection === "regulations" ? "active" : ""}
-                onClick={() => handleSubsectionClick("manageData", "regulations")}
+                onClick={() =>
+                  handleSubsectionClick("manageData", "regulations")
+                }
               >
                 Regulations
               </li>
@@ -105,7 +107,9 @@ const AdminDashboard = () => {
           </li>
 
           <li
-            className={activeSection === "manageFaculty" ? "active-section" : ""}
+            className={
+              activeSection === "manageFaculty" ? "active-section" : ""
+            }
             onClick={() => {
               setActiveSection("manageFaculty");
               setActiveSubsection("");
@@ -114,7 +118,7 @@ const AdminDashboard = () => {
             Manage Faculty
           </li>
 
-          <li
+          {/* <li
             className={activeSection === "analytics" ? "active-section" : ""}
             onClick={() => setActiveSection("analytics")}
           >
@@ -126,7 +130,7 @@ const AdminDashboard = () => {
             onClick={() => setActiveSection("settings")}
           >
             Settings
-          </li>
+          </li> */}
         </ul>
 
         <div className="sidebar-logout" onClick={handleLogout}>
