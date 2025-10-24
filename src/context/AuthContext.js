@@ -1,20 +1,35 @@
 // src/context/AuthContext.js
 import { createContext, useState, useEffect } from "react";
+import { jwtDecode } from "jwt-decode"; // v3+ syntax
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("user")) || null
+    JSON.parse(sessionStorage.getItem("user")) || null
   );
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const [token, setToken] = useState(sessionStorage.getItem("token") || null);
 
-  // Check token expiry on load (optional: add JWT decode if needed)
+  // Auto logout when token expires
   useEffect(() => {
-    if (!token || !user) {
+    if (!token || !user) return;
+
+    try {
+      const decoded = jwtDecode(token);
+      const expTime = decoded.exp * 1000; // exp in seconds → ms
+      const now = Date.now();
+
+      if (expTime <= now) {
+        logout();
+      } else {
+        const timeout = setTimeout(() => logout(), expTime - now);
+        return () => clearTimeout(timeout);
+      }
+    } catch (err) {
+      console.error("Invalid token:", err);
       logout();
     }
-  }, []);
+  }, [token]);
 
   const login = async (idRaw, passwordRaw) => {
     const id = idRaw?.trim();
@@ -23,7 +38,6 @@ export const AuthProvider = ({ children }) => {
       return { success: false, message: "ID and password required" };
 
     const backendBase = process.env.REACT_APP_BACKEND_URL?.trim() || "";
-
     let endpoint = "";
     let body = {};
 
@@ -59,10 +73,11 @@ export const AuthProvider = ({ children }) => {
         endpoint === "admin/login" ? "admin" : endpoint.split("/")[0];
       const userData = data[userKey];
 
+      // Save to sessionStorage
       setUser(userData);
       setToken(data.token);
-      localStorage.setItem("user", JSON.stringify(userData));
-      localStorage.setItem("token", data.token);
+      sessionStorage.setItem("user", JSON.stringify(userData));
+      sessionStorage.setItem("token", data.token);
 
       return { success: true, role: userData.role };
     } catch (err) {
@@ -73,8 +88,8 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     setToken(null);
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("user");
+    sessionStorage.removeItem("token");
   };
 
   return (

@@ -1,4 +1,3 @@
-// src/pages/Login.jsx
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +17,17 @@ const Login = () => {
   const [branch, setBranch] = useState("");
   const [invalidLogin, setInvalidLogin] = useState(false);
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false); // 🆕 added
+  const [loading, setLoading] = useState(false);
+
+  const [registerMessage, setRegisterMessage] = useState("");
+  const [registerSuccess, setRegisterSuccess] = useState(false);
+
+  const [showForgotModal, setShowForgotModal] = useState(false);
+  const [forgotRole, setForgotRole] = useState("");
+  const [forgotId, setForgotId] = useState("");
+  const [forgotMessage, setForgotMessage] = useState("");
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotSuccess, setForgotSuccess] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -34,6 +43,8 @@ const Login = () => {
     setName("");
     setEmail("");
     setBranch("");
+    setRegisterMessage("");
+    setRegisterSuccess(false);
   };
 
   const validateRegister = () => {
@@ -49,7 +60,6 @@ const Login = () => {
       newErrors.password = "Password must be at least 6 characters";
     if (password !== confirmPassword)
       newErrors.confirmPassword = "Passwords do not match";
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -57,7 +67,8 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setInvalidLogin(false);
-    setLoading(true); // 🆕 start loading
+    setLoading(true);
+    setRegisterMessage("");
 
     try {
       if (isLogin) {
@@ -65,21 +76,16 @@ const Login = () => {
         if (!result.success) {
           setInvalidLogin(true);
           clearFields();
-          setLoading(false); // 🆕 stop loading
+          setLoading(false);
           return;
         }
-        // navigation handled by useEffect after user is set
       } else {
         if (!validateRegister()) {
-          setLoading(false); // 🆕 stop loading if invalid
+          setLoading(false);
           return;
         }
-
         const res = await fetch(
-          `${process.env.REACT_APP_BACKEND_URL.replace(
-            /\/$/,
-            ""
-          )}/auth/student/register`,
+          `${process.env.REACT_APP_BACKEND_URL}/auth/student/register`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -92,22 +98,25 @@ const Login = () => {
             }),
           }
         );
-
         const data = await res.json();
         if (!res.ok) {
-          throw new Error(data.message || "Registration failed");
+          setRegisterMessage(data.message || "Registration failed");
+          setRegisterSuccess(false);
+          setLoading(false);
+          return;
         }
-
-        alert("Registration successful! Please login.");
+        setRegisterMessage("Registration successful! Please login.");
+        setRegisterSuccess(true);
         setIsLogin(true);
         clearFields();
       }
     } catch (err) {
-      console.error("[Login] submit error:", err);
-      setInvalidLogin(true);
+      console.error(err);
+      setRegisterMessage("Something went wrong. Try again.");
+      setRegisterSuccess(false);
       clearFields();
     } finally {
-      setLoading(false); // 🆕 always stop loading
+      setLoading(false);
     }
   };
 
@@ -118,6 +127,7 @@ const Login = () => {
           <span key={i} className="ball" />
         ))}
       </div>
+
       <div className="form-container">
         <form className="form" onSubmit={handleSubmit}>
           <img className="logo" src={logo} alt="logo" />
@@ -128,6 +138,7 @@ const Login = () => {
                 setIsLogin(true);
                 setInvalidLogin(false);
                 setErrors({});
+                setRegisterMessage("");
               }}
             >
               Login
@@ -138,123 +149,225 @@ const Login = () => {
                 setIsLogin(false);
                 setInvalidLogin(false);
                 setErrors({});
+                setRegisterMessage("");
               }}
             >
               Register
             </h2>
           </div>
 
-          {!isLogin ? (
-            <>
-              <p className="para">Only for students!!</p>
-              <input
-                type="text"
-                placeholder="Full Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-              {errors.name && <p className="error">{errors.name}</p>}
+          <div className="form-fields-wrapper">
+            {!isLogin ? (
+              <>
+                <p className="para">Only for students!!</p>
 
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              {errors.email && <p className="error">{errors.email}</p>}
+                {errors.name && <p className="reg-error">{errors.name}</p>}
+                <input
+                  type="text"
+                  placeholder="Full Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
 
-              <input
-                type="text"
-                placeholder="Roll Number"
-                value={id}
-                onChange={(e) => setId(e.target.value)}
-              />
-              {errors.id && <p className="error">{errors.id}</p>}
+                {errors.email && <p className="reg-error">{errors.email}</p>}
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
 
-              <select
-                value={branch}
-                onChange={(e) => setBranch(e.target.value)}
-              >
-                <option value="">Select Branch</option>
-                <option value="CSE">CSE</option>
-                <option value="ECE">ECE</option>
-                <option value="EEE">EEE</option>
-                <option value="MECH">MECH</option>
-                <option value="CIVIL">CIVIL</option>
-              </select>
-              {errors.branch && <p className="error">{errors.branch}</p>}
+                {errors.id && <p className="reg-error">{errors.id}</p>}
+                <input
+                  type="text"
+                  placeholder="Roll Number"
+                  value={id}
+                  onChange={(e) => setId(e.target.value)}
+                />
 
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              {errors.password && <p className="error">{errors.password}</p>}
+                {errors.branch && <p className="reg-error">{errors.branch}</p>}
+                <select
+                  value={branch}
+                  onChange={(e) => setBranch(e.target.value)}
+                >
+                  <option value="">Select Branch</option>
+                  <option value="CSE">CSE</option>
+                  <option value="ECE">ECE</option>
+                  <option value="EEE">EEE</option>
+                  <option value="MECH">MECH</option>
+                  <option value="CIVIL">CIVIL</option>
+                </select>
 
-              <input
-                type="password"
-                placeholder="Confirm Password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-              {errors.confirmPassword && (
-                <p className="error">{errors.confirmPassword}</p>
-              )}
-            </>
-          ) : (
-            <>
-              <input
-                type="text"
-                placeholder="Login Id"
-                value={id}
-                onChange={(e) => setId(e.target.value)}
-                required
-              />
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </>
-          )}
+                {errors.password && (
+                  <p className="reg-error">{errors.password}</p>
+                )}
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+
+                {errors.confirmPassword && (
+                  <p className="reg-error">{errors.confirmPassword}</p>
+                )}
+                <input
+                  type="password"
+                  placeholder="Confirm Password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+
+                {registerMessage && (
+                  <p
+                    className="para"
+                    style={{ color: registerSuccess ? "green" : "red" }}
+                  >
+                    {registerMessage}
+                  </p>
+                )}
+              </>
+            ) : (
+              <>
+                <input
+                  type="text"
+                  placeholder="Login Id"
+                  value={id}
+                  onChange={(e) => setId(e.target.value)}
+                  required
+                />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <div
+                  className="forgot-link"
+                  onClick={() => setShowForgotModal(true)}
+                >
+                  Forgot Password ?
+                </div>
+              </>
+            )}
+          </div>
 
           {invalidLogin && isLogin && (
             <p className="para error">Invalid login credentials !!</p>
           )}
 
-          <button type="submit" disabled={loading}>
-            {loading ? (
-              <span
-                style={{
-                  display: "inline-block",
-                  width: "16px",
-                  height: "16px",
-                  border: "2px solid #fff",
-                  borderTop: "2px solid transparent",
-                  borderRadius: "50%",
-                  animation: "spin 0.7s linear infinite",
-                }}
-              />
-            ) : isLogin ? (
-              "Login"
-            ) : (
-              "Register"
-            )}
-          </button>
+          <div className="login-btn-wrapper">
+            <button type="submit" disabled={loading}>
+              {loading ? (
+                <span className="spinner" />
+              ) : isLogin ? (
+                "Login"
+              ) : (
+                "Register"
+              )}
+            </button>
+          </div>
         </form>
       </div>
-      <div className="illustration" />
 
-      {/* 🆕 Inline spinner keyframes (no CSS file edit needed) */}
-      <style>
-        {`@keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-          }`}
-      </style>
+      {/* Forgot Password Modal */}
+      {showForgotModal && (
+        <div className="modal-backdrop">
+          <div className="modal">
+            <h3>Forgot Password</h3>
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                if (!forgotRole || !forgotId) {
+                  setForgotMessage("Please select role and enter ID");
+                  setForgotSuccess(false);
+                  return;
+                }
+                setForgotLoading(true);
+                setForgotMessage("");
+                try {
+                  const res = await fetch(
+                    `${process.env.REACT_APP_BACKEND_URL}/auth/forgot-password`,
+                    {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ role: forgotRole, id: forgotId }),
+                    }
+                  );
+                  const data = await res.json();
+                  if (!res.ok) throw new Error(data.message || "Error");
+
+                  setForgotMessage(data.message);
+                  setForgotSuccess(true);
+
+                  // ✅ Reset modal fields on success
+                  setForgotRole("");
+                  setForgotId("");
+                } catch (err) {
+                  setForgotMessage(err.message);
+                  setForgotSuccess(false);
+                } finally {
+                  setForgotLoading(false);
+                }
+              }}
+            >
+              <select
+                value={forgotRole}
+                onChange={(e) => setForgotRole(e.target.value)}
+                required
+              >
+                <option value="">Select Role</option>
+                <option value="student">Student</option>
+                <option value="faculty">Faculty</option>
+              </select>
+
+              <input
+                type="text"
+                placeholder={
+                  forgotRole === "faculty" ? "Employee ID" : "Roll Number"
+                }
+                value={forgotId}
+                onChange={(e) => setForgotId(e.target.value)}
+                required
+              />
+
+              <div className="modal-btn-group">
+                <button type="submit" disabled={forgotLoading || forgotSuccess}>
+                  {forgotLoading ? <span className="spinner" /> : "Reset"}
+                </button>
+                <button
+                  type="button"
+                  className="close-btn"
+                  onClick={() => {
+                    setShowForgotModal(false);
+                    setForgotRole("");
+                    setForgotId("");
+                    setForgotMessage("");
+                    setForgotSuccess(false);
+                  }}
+                >
+                  Close
+                </button>
+              </div>
+            </form>
+
+            {forgotMessage && (
+              <p
+                style={{
+                  marginTop: "10px",
+                  color: forgotSuccess ? "green" : "red",
+                  fontWeight: "500",
+                }}
+              >
+                {forgotMessage}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+
+      <div className="illustration" />
     </div>
   );
 };

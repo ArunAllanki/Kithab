@@ -1,13 +1,11 @@
-/* Global body */
+/* Global variables */
 :root {
-  --main-gradient: linear-gradient(#fab458,#e29127, black);
-
-  /* background-image: linear-gradient(#ee9b2f, black); */
-
-  /* background-position: top left; */
-  /* background-image: linear-gradient(45#ec9f3a, black); */
+  --main-gradient: linear-gradient(#fab458, #e29127, black);
+  --success-color: #27ae60;
+  --error-color: #e74c3c;
 }
 
+/* Body & html */
 html,
 body {
   margin: 0;
@@ -16,7 +14,7 @@ body {
   height: 100%;
   display: flex;
   font-family: "Roboto", sans-serif;
-  background: var(--main-gradient); /* apply gradient to body/html */
+  background: var(--main-gradient);
   background-repeat: no-repeat;
   background-size: cover;
   z-index: 1;
@@ -28,15 +26,15 @@ body {
   }
 }
 
+/* Background balls */
 .background {
   position: fixed;
   width: 100vw;
   height: 100vh;
   top: 0;
   left: 0;
-  /* background: var(--sec); */
   overflow: hidden;
-  z-index: -1; /* ensures background stays behind form */
+  z-index: -1;
 }
 
 .ball {
@@ -55,7 +53,6 @@ body {
   color: grey;
 }
 
-/* Ball positions (your original setup) */
 .ball:nth-child(1) {
   top: 77%;
   left: 88%;
@@ -129,18 +126,29 @@ body {
   flex-direction: row;
 }
 
+.login-btn-wrapper {
+  width: 100%;
+}
+
 .logo {
   width: 40%;
   height: auto;
   margin-bottom: 1rem;
 }
 
-/* Left side: form */
+/* Form container scrollable with hidden scrollbar */
 .form-container {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow-y: auto;
+  -ms-overflow-style: none; /* IE, Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.form-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 /* Form styling */
@@ -190,12 +198,12 @@ body {
 /* Inputs & dropdown */
 input,
 select {
-  background: var(--bg-color);
+  background: var(--bg-color, #f0f0f0);
   padding: 10px;
   border-radius: 10px;
   margin-bottom: 2vh;
   font-size: medium;
-  width: 100%; /* ensures same width */
+  width: 100%;
   border: none;
   outline: none;
   color: #000;
@@ -205,7 +213,6 @@ select {
   -moz-appearance: none;
 }
 
-/* Dropdown with custom arrow */
 select {
   cursor: pointer;
   background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
@@ -216,11 +223,26 @@ select {
 }
 
 /* Validation error messages */
-.error {
+.reg-error {
   color: red;
   font-size: 0.85rem;
-  margin: -10px 0 10px;
+  margin: 0 10px;
   align-self: flex-start;
+}
+
+/* Backend registration response message */
+.register-message {
+  margin: 10px 0;
+  font-weight: 500;
+  text-align: center;
+}
+
+.register-message.success {
+  color: var(--success-color);
+}
+
+.register-message.error {
+  color: var(--error-color);
 }
 
 /* Button */
@@ -229,18 +251,54 @@ button {
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  background-color: var(--third-color);
+  background-color: var(--third-color, #217fbe);
   color: white;
   font-size: large;
   font-weight: bold;
   width: 100%;
 }
 
-/* Para text */
-.para {
-  font-size: medium;
-  color: var(--primary-color);
-  margin-bottom: 1rem;
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Spinner inside button */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Forgot password link */
+.forgot-link {
+  font-size: 0.9rem;
+  text-align: right;
+  margin-bottom: 15px;
+  text-align: end;
+  width: 95%;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  color: var(--third-color, #217fbe);
+}
+
+.forgot-link:hover {
+  color: #217fbe;
 }
 
 /* Illustration */
@@ -258,26 +316,114 @@ button {
     flex-direction: column;
     min-height: 100vh;
   }
-
   .form-container,
   .illustration {
     flex: none;
     width: 100%;
     height: auto;
   }
-
   .form {
     font-size: small;
     padding: 5vh 5vw;
     max-width: 350px;
     margin: 5vh 10vw;
   }
-
   .illustration {
     height: 40vh;
   }
-
   .form-tabs {
     gap: 1rem;
   }
+}
+
+/* Keep all previous styles exactly the same... */
+
+/* Wrapper */
+.login-wrapper {
+  display: flex;
+  min-width: 100vw;
+  min-height: 100vh;
+  flex-direction: row;
+}
+
+/* Form container scrollable with proper scroll on all screen sizes */
+.form-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+  -ms-overflow-style: none; /* IE, Edge */
+  scrollbar-width: none; /* Firefox */
+  padding: 2vh 0; /* Added padding for mobile scroll */
+  max-height: 100vh; /* Ensure it never overflows viewport */
+}
+
+.form-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Wrap all form fields in a scrollable wrapper to fix mobile scrolling */
+.form-fields-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* Keep all other styles intact (form, inputs, buttons, balls, illustration, media queries, etc.) */
+/* Modal backdrop */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal content */
+.modal {
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Disable background scroll when modal is open */
+body.modal-open {
+  overflow: hidden;
+}
+
+/* Modal buttons horizontal layout */
+.modal-btn-group {
+  display: flex;
+  justify-content: space-between; /* Side by side */
+  gap: 10px; /* spacing between buttons */
+  margin-top: 1rem;
+}
+
+.modal-btn-group button {
+  flex: 1; /* Equal width buttons */
+}
+
+/* Modal max-width */
+.modal {
+  max-width: 400px; /* Added max-width without breaking existing styles */
+  width: 90%;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 15px rgba(103, 104, 109, 0.37);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

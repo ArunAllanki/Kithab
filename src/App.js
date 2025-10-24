@@ -4,7 +4,9 @@ import { AuthProvider } from "./context/AuthContext";
 import Login from "./pages/Login.jsx";
 import StudentDashboard from "./pages/StudentDashboard";
 import FacultyDashboard from "./pages/FacultyDashboard";
-import AdminDashboard from "./pages/AdminDashboard.jsx";
+import AdminDashboard from "./pages/AdminDashboard";
+import ResetPassword from "./pages/ResetPassword";
+
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
           <Route path="/student" element={<StudentDashboard />} />
           <Route path="/faculty" element={<FacultyDashboard />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
+
         </Routes>
       </Router>
     </AuthProvider>
