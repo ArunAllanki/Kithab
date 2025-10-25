@@ -20,7 +20,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     if (!token || user?.role !== "admin") {
       logout(); // clear localStorage
-      navigate("/"); // safe redirect inside <Router>
+      navigate("/login"); // safe redirect inside <Router>
     }
   }, [token, user, logout, navigate]);
 
@@ -31,7 +31,7 @@ const AdminDashboard = () => {
 
   const handleLogout = () => {
     logout();
-    navigate("/"); // no alert
+    navigate("/login"); // no alert
   };
 
   const renderContent = () => {

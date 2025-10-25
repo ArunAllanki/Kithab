@@ -1,52 +1,34 @@
-import { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import API from "../services/api";
-import { AuthContext } from "../context/AuthContext";
-import Navbar from "../Components/Navbar.jsx";
+import logo from "../Assets/kithabImg.png";
 import Card from "../Components/Card.jsx";
 import Carousel from "../Components/Carousel.jsx";
 import "./StudentDashboard.css";
 
 const StudentDashboard = () => {
-  const { token, user, logout } = useContext(AuthContext);
   const [filteredNotes, setFilteredNotes] = useState([]);
-
   const [regulations, setRegulations] = useState([]);
   const [branches, setBranches] = useState([]);
   const [subjects, setSubjects] = useState([]);
-
   const [selectedRegulation, setSelectedRegulation] = useState("");
   const [selectedBranch, setSelectedBranch] = useState("");
   const [selectedSemester, setSelectedSemester] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
-
   const [searchDone, setSearchDone] = useState(false);
   const [loading, setLoading] = useState(false);
   const [downloadingAll, setDownloadingAll] = useState(false);
 
-  const navigate = useNavigate();
   const backend = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
-    if (!token || user?.role !== "student") {
-      navigate("/");
-      return;
-    }
-
     const fetchMeta = async () => {
       try {
         const [regRes, branchRes, subjectRes] = await Promise.all([
-          API.get("/meta/regulations", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          API.get("/meta/branches", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          API.get("/meta/subjects?populateBranch=true", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
+          API.get("/meta/regulations"),
+          API.get("/meta/branches"),
+          API.get("/meta/subjects?populateBranch=true"),
         ]);
 
         setRegulations(regRes.data.regulations || []);
@@ -54,16 +36,12 @@ const StudentDashboard = () => {
         setSubjects(subjectRes.data.subjects || []);
       } catch (err) {
         console.error(err);
-        if (err.response?.status === 401) {
-          alert("Session expired. Please login again.");
-          logout();
-          navigate("/");
-        }
+        alert("Failed to fetch metadata");
       }
     };
 
     fetchMeta();
-  }, [token, navigate, logout, user]);
+  }, []);
 
   const filteredBranches = branches.filter(
     (b) =>
@@ -89,10 +67,7 @@ const StudentDashboard = () => {
 
     setLoading(true);
     try {
-      const res = await API.get(`/notes/subject/${selectedSubject}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
+      const res = await API.get(`/notes/subject/${selectedSubject}`);
       setFilteredNotes(res.data.notes || []);
       setSearchDone(true);
     } catch (err) {
@@ -111,9 +86,7 @@ const StudentDashboard = () => {
     try {
       const zip = new JSZip();
       for (const note of filteredNotes) {
-        const res = await fetch(`${backend}/notes/${note._id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await fetch(`${backend}/notes/${note._id}`);
         const blob = await res.blob();
         zip.file(`${note.title}.pdf`, blob);
       }
@@ -127,12 +100,15 @@ const StudentDashboard = () => {
     }
   };
 
-  if (!token || !user) return <p>Redirecting to Login...</p>;
-
   return (
     <div className="SD-container">
-      <Navbar />
-      {/* Background Balls */}
+      <header className="header">
+        <img className="rce" src={logo} alt="Kithab-logo" />
+        {/* <div className="line"></div> */}
+          <div className="logo-separator"></div>
+
+        <img className="kithab" src={logo} alt="Kithab-logo" />
+      </header>
       <div className="background">
         {[...Array(8)].map((_, i) => (
           <span key={i} className="ball"></span>
@@ -249,13 +225,7 @@ const StudentDashboard = () => {
                 <>
                   <ul className="notes-list">
                     {filteredNotes.map((note) => (
-                      <Card
-                        key={note._id}
-                        note={note}
-                        token={token}
-                        backend={backend}
-                        user={user}
-                      />
+                      <Card key={note._id} note={note} backend={backend} />
                     ))}
                   </ul>
                   {filteredNotes.length > 0 && (

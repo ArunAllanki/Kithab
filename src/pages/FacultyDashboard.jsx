@@ -24,7 +24,7 @@ const FacultyDashboard = () => {
 
   useEffect(() => {
     if (!token || user.role !== "faculty") {
-      navigate("/");
+      navigate("/login"); // ✅ Redirects to /login instead of /
       return;
     }
 
@@ -118,7 +118,7 @@ const FacultyDashboard = () => {
       if (err.response?.status === 401) {
         alert("Session expired. Please login again.");
         logout();
-        navigate("/");
+        navigate("/login"); // ✅ Redirects to /login instead of /
       } else {
         alert("Upload failed. Try again.");
       }
@@ -127,58 +127,19 @@ const FacultyDashboard = () => {
     }
   };
 
-  // New function to fetch and open note file
-  // const handleViewFile = async (noteId) => {
-  //   try {
-  //     const res = await API.get(`/notes/${noteId}`, {
-  //       responseType: "blob", // important for file
-  //     });
-
-  //     const fileURL = URL.createObjectURL(new Blob([res.data]));
-  //     window.open(fileURL);
-  //   } catch (err) {
-  //     console.error("Error fetching file:", err);
-  //     alert("Failed to fetch file.");
-  //   }
-  // };
-
-  // const handleViewFile = async (note) => {
-  //   try {
-  //     const res = await API.get(`/notes/${note._id}`, {
-  //       responseType: "blob",
-  //     });
-
-  //     const file = new Blob([res.data], { type: note.file.contentType });
-  //     const fileURL = URL.createObjectURL(file);
-
-  //     // Open in new tab
-  //     window.open(fileURL, "_blank");
-
-  //     // Revoke the URL after a short delay to free memory
-  //     setTimeout(() => URL.revokeObjectURL(fileURL), 10000);
-  //   } catch (err) {
-  //     console.error("Error fetching file:", err);
-  //     alert("Failed to fetch file.");
-  //   }
-  // };
-
   const handleViewFile = async (note) => {
     try {
       const res = await API.get(`/notes/${note._id}`, {
         responseType: "blob",
       });
 
-      // Get the content type from response headers
       const contentType =
         res.headers["content-type"] || "application/octet-stream";
 
       const file = new Blob([res.data], { type: contentType });
       const fileURL = URL.createObjectURL(file);
 
-      // Open in new tab
       window.open(fileURL, "_blank");
-
-      // Revoke the URL after a short delay to free memory
       setTimeout(() => URL.revokeObjectURL(fileURL), 10000);
     } catch (err) {
       console.error("Error fetching file:", err);
@@ -283,7 +244,6 @@ const FacultyDashboard = () => {
             <p>No uploads yet.</p>
           ) : (
             <ul className="uploads-list">
-              {/* {console.log(uploads)} */}
               {uploads.map((note) => (
                 <li key={note._id} className="upload-card">
                   <h4>{note.title}</h4>

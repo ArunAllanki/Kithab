@@ -16,9 +16,9 @@ const Card = ({ note, backend, user, token, onFavUpdate }) => {
   const handleDownload = async () => {
     try {
       setDownloading(true);
-      const res = await fetch(`${backend}/notes/${note._id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await fetch(`${backend}/notes/${note._id}`
+      );
+
       if (!res.ok) throw new Error("Failed to fetch file");
       const blob = await res.blob();
 
@@ -31,7 +31,7 @@ const Card = ({ note, backend, user, token, onFavUpdate }) => {
       a.click();
       a.remove();
       window.URL.revokeObjectURL(url);
-    } catch (err) {
+    } catch (err) {                       
       console.error(err);
       alert("Failed to download file");
     } finally {

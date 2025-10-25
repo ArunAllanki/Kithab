@@ -123,6 +123,7 @@ body {
   display: flex;
   min-width: 100vw;
   min-height: 100vh;
+  overflow-y: auto;
   flex-direction: row;
 }
 
@@ -165,6 +166,7 @@ body {
   border-radius: 15px;
   max-width: 350px;
   width: 100%;
+  max-width: 300px;
   margin: 10vh;
 }
 
@@ -313,8 +315,11 @@ button:disabled {
 /* Responsive */
 @media screen and (max-width: 768px) {
   .login-wrapper {
-    flex-direction: column;
+    display: flex;
+    min-width: 100vw;
     min-height: 100vh;
+    flex-direction: column;
+    overflow-y: auto;
   }
   .form-container,
   .illustration {
@@ -325,7 +330,7 @@ button:disabled {
   .form {
     font-size: small;
     padding: 5vh 5vw;
-    max-width: 350px;
+    max-width: 300px;
     margin: 5vh 10vw;
   }
   .illustration {
@@ -339,12 +344,12 @@ button:disabled {
 /* Keep all previous styles exactly the same... */
 
 /* Wrapper */
-.login-wrapper {
+/* .login-wrapper {
   display: flex;
   min-width: 100vw;
   min-height: 100vh;
   flex-direction: row;
-}
+} */
 
 /* Form container scrollable with proper scroll on all screen sizes */
 .form-container {
@@ -353,6 +358,7 @@ button:disabled {
   justify-content: center;
   align-items: center;
   overflow-y: auto;
+  
   -ms-overflow-style: none; /* IE, Edge */
   scrollbar-width: none; /* Firefox */
   padding: 2vh 0; /* Added padding for mobile scroll */
