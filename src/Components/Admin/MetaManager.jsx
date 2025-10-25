@@ -26,6 +26,10 @@ const MetaManager = ({ token, subsection }) => {
   const [showBranchModal, setShowBranchModal] = useState(false);
   const [showSubjectModal, setShowSubjectModal] = useState(false);
 
+  // ==================== DELETE MODAL STATE ====================
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteItem, setDeleteItem] = useState(null); // { type, name, id }
+
   // ==================== FETCH DATA ====================
   const fetchData = async () => {
     try {
@@ -70,16 +74,24 @@ const MetaManager = ({ token, subsection }) => {
     fetchData();
   }, []);
 
-  // ==================== DELETE ITEM ====================
-  const handleDelete = async (type, id) => {
-    if (!window.confirm("Are you sure?")) return;
+  // ==================== DELETE HANDLERS ====================
+  const handleDeleteClick = (type, item) => {
+    setDeleteItem({ type, name: item.name, id: item._id });
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deleteItem) return;
     try {
-      await API.delete(`/admin/${type}/${id}`, {
+      await API.delete(`/admin/${deleteItem.type}/${deleteItem.id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchData();
     } catch (err) {
       alert(err.response?.data?.message || "Delete failed");
+    } finally {
+      setShowDeleteModal(false);
+      setDeleteItem(null);
     }
   };
 
@@ -119,7 +131,6 @@ const MetaManager = ({ token, subsection }) => {
   const handleEditSave = async () => {
     if (!editItem) return;
 
-    // Basic validation
     for (const key of Object.keys(editItem)) {
       if (
         ["name", "code", "numberOfSemesters", "regulation"].includes(key) &&
@@ -134,7 +145,6 @@ const MetaManager = ({ token, subsection }) => {
       }
     }
 
-    // Duplication check
     if (subsection === "regulations" && isDuplicateRegulation(editItem)) {
       setEditError("Regulation name already exists.");
       return;
@@ -220,7 +230,7 @@ const MetaManager = ({ token, subsection }) => {
                     </button>
                     <button
                       className="btn-danger action-btn"
-                      onClick={() => handleDelete("regulations", r._id)}
+                      onClick={() => handleDeleteClick("regulations", r)}
                     >
                       Delete
                     </button>
@@ -286,7 +296,7 @@ const MetaManager = ({ token, subsection }) => {
                       </button>
                       <button
                         className="btn-danger action-btn"
-                        onClick={() => handleDelete("branches", b._id)}
+                        onClick={() => handleDeleteClick("branches", b)}
                       >
                         Delete
                       </button>
@@ -422,7 +432,7 @@ const MetaManager = ({ token, subsection }) => {
                       </button>
                       <button
                         className="btn-danger action-btn"
-                        onClick={() => handleDelete("subjects", s._id)}
+                        onClick={() => handleDeleteClick("subjects", s)}
                       >
                         Delete
                       </button>
@@ -439,7 +449,7 @@ const MetaManager = ({ token, subsection }) => {
         </div>
       )}
 
-      {/* ==================== MODALS ==================== */}
+      {/* ==================== ADD MODALS ==================== */}
       {showRegModal && (
         <AddRegulationModal
           token={token}
@@ -448,7 +458,6 @@ const MetaManager = ({ token, subsection }) => {
           regulations={regulations}
         />
       )}
-
       {showBranchModal && (
         <AddBranchModal
           token={token}
@@ -458,7 +467,6 @@ const MetaManager = ({ token, subsection }) => {
           branches={branches}
         />
       )}
-
       {showSubjectModal && (
         <AddSubjectModal
           token={token}
@@ -500,7 +508,6 @@ const MetaManager = ({ token, subsection }) => {
                   />
                 </>
               )}
-
               {subsection === "branches" && (
                 <>
                   <label>Name:</label>
@@ -532,7 +539,6 @@ const MetaManager = ({ token, subsection }) => {
                   </select>
                 </>
               )}
-
               {subsection === "subjects" && (
                 <>
                   <label>Name:</label>
@@ -552,7 +558,6 @@ const MetaManager = ({ token, subsection }) => {
                 </>
               )}
             </div>
-
             <div
               style={{
                 marginTop: "1rem",
@@ -563,8 +568,48 @@ const MetaManager = ({ token, subsection }) => {
               <button onClick={handleEditSave}>Save</button>
               <button
                 className="btn-danger"
-                onClick={() => setEditItem(null)}
                 style={{ marginLeft: "0.5rem" }}
+                onClick={() => setEditItem(null)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ==================== DELETE CONFIRMATION MODAL ==================== */}
+      {showDeleteModal && deleteItem && (
+        <div className="edit-modal-overlay">
+          <div className="edit-modal-content">
+            <h3>Confirm Delete</h3>
+            <p>
+              {deleteItem.type === "regulations" &&
+                `All branches, subjects and notes of "${deleteItem.name}" regulation will also be deleted.`}
+              {deleteItem.type === "branches" &&
+                `All subjects and notes of "${deleteItem.name}" branch will also be deleted.`}
+              {deleteItem.type === "subjects" &&
+                `All notes of "${deleteItem.name}" subject will also be deleted.`}
+            </p>
+            <div
+              style={{
+                marginTop: "1rem",
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <button
+                onClick={handleConfirmDelete}
+                style={{ marginRight: "0.5rem" }}
+              >
+                Delete
+              </button>
+              <button
+                className="btn-danger"
+                onClick={() => {
+                  setShowDeleteModal(false);
+                  setDeleteItem(null);
+                }}
               >
                 Cancel
               </button>

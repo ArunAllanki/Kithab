@@ -22,6 +22,7 @@ const NotesManager = () => {
   const [notes, setNotes] = useState([]);
   const [loadingNotes, setLoadingNotes] = useState(false);
   const [error, setError] = useState("");
+  const [searchPerformed, setSearchPerformed] = useState(false); // track if search done
 
   // Delete modal state
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -32,7 +33,7 @@ const NotesManager = () => {
   const [showFacultyModal, setShowFacultyModal] = useState(false);
   const [selectedFaculty, setSelectedFaculty] = useState(null);
 
-  // ===== Fetch all meta data once on mount (admin routes) =====
+  // ===== Fetch all meta data once on mount =====
   useEffect(() => {
     if (!token) return;
 
@@ -52,7 +53,6 @@ const NotesManager = () => {
 
         setRegulations(Array.isArray(regRes.data) ? regRes.data : []);
 
-        // normalize branches: ensure regulation is id
         const normBranches = (branchRes.data || []).map((b) => ({
           ...b,
           regulation:
@@ -62,7 +62,6 @@ const NotesManager = () => {
         }));
         setBranches(normBranches);
 
-        // normalize subjects: ensure branch is id and semester is number
         const normSubjects = (subjectRes.data || []).map((s) => ({
           ...s,
           branch:
@@ -74,18 +73,13 @@ const NotesManager = () => {
         setSubjects(normSubjects);
       } catch (err) {
         console.error("Error fetching admin meta:", err);
-        if (err.response?.status === 401) {
-          // token invalid/expired
-          logout();
-        } else {
-          setError("Failed to load meta data");
-        }
+        if (err.response?.status === 401) logout();
+        else setError("Failed to load meta data");
       }
     };
 
     fetchAllMeta();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]); // logout is stable from context
+  }, [token, logout]);
 
   // Derived lists
   const filteredBranches = branches.filter(
@@ -108,28 +102,17 @@ const NotesManager = () => {
       Number(s.semester) === Number(selectedSemester)
   );
 
-  // ===== Fetch notes based on selected filters =====
+  // ===== Fetch notes =====
   const fetchNotes = async () => {
-    // require all filters
-    if (
-      !selectedRegulation ||
-      !selectedBranch ||
-      !selectedSemester ||
-      !selectedSubject
-    ) {
-      setError("Please select Regulation, Branch, Semester and Subject");
-      return;
-    }
-
     setError("");
     setLoadingNotes(true);
+    setSearchPerformed(true);
 
     try {
       const { data } = await API.get("/admin/notes", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      // normalize notes (ids & numbers)
       const normalized = (data || []).map((n) => ({
         ...n,
         regulation:
@@ -166,7 +149,7 @@ const NotesManager = () => {
     }
   };
 
-  // ===== Download note file (blob) =====
+  // ===== Download note file =====
   const downloadNote = async (noteId, filename, contentType) => {
     try {
       const response = await API.get(`/admin/notes/${noteId}/file`, {
@@ -187,7 +170,6 @@ const NotesManager = () => {
       window.URL.revokeObjectURL(url);
     } catch (err) {
       console.error("Failed to download note file", err);
-      // if 401 logout
       if (err.response?.status === 401) logout();
       else alert("Failed to download note file");
     }
@@ -218,18 +200,32 @@ const NotesManager = () => {
     }
   };
 
-  // Reset results when filters change
+  // Reset notes & search when filters change
   useEffect(() => {
     setNotes([]);
+    setSearchPerformed(false);
   }, [selectedRegulation, selectedBranch, selectedSemester, selectedSubject]);
 
-  // ===== Faculty modal: fetch details if needed (use uploadedNotes if present) =====
+  // ===== Faculty modal =====
   const handleFacultyClick = (faculty) => {
-    // if faculty already contains uploadedNotes (populated), use it,
-    // otherwise show modal and optionally you could fetch /admin/faculty/:id/uploads
     setSelectedFaculty(faculty || null);
     setShowFacultyModal(true);
   };
+
+  // ===== Clear all filters =====
+  const clearFilters = () => {
+    setSelectedRegulation("");
+    setSelectedBranch("");
+    setSelectedSemester("");
+    setSelectedSubject("");
+    setNotes([]);
+    setSearchPerformed(false);
+    setError("");
+  };
+
+  // ===== Check if all filters selected =====
+  const allFiltersSelected =
+    selectedRegulation && selectedBranch && selectedSemester && selectedSubject;
 
   return (
     <div className="notes-manager-container">
@@ -300,8 +296,16 @@ const NotesManager = () => {
           ))}
         </select>
 
-        <button className="add-btn" onClick={fetchNotes}>
+        <button
+          className="add-btn"
+          onClick={fetchNotes}
+          disabled={!allFiltersSelected} // disabled if filters incomplete
+        >
           Get Notes
+        </button>
+
+        <button className="add-btn" onClick={clearFilters}>
+          Clear Filters
         </button>
       </div>
 
@@ -311,9 +315,9 @@ const NotesManager = () => {
       <div className="table-container">
         {loadingNotes ? (
           <p>Loading notes...</p>
-        ) : notes.length === 0 ? (
+        ) : searchPerformed && notes.length === 0 ? (
           <p>No notes found</p>
-        ) : (
+        ) : notes.length > 0 ? (
           <table>
             <thead>
               <tr>
@@ -354,7 +358,7 @@ const NotesManager = () => {
               ))}
             </tbody>
           </table>
-        )}
+        ) : null}
       </div>
 
       {/* ===== Delete Modal ===== */}
