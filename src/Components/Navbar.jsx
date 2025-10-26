@@ -10,8 +10,8 @@ const Navbar = () => {
 
   const handleLogout = () => {
     try {
-      logout(); // clears token and user in context
-      navigate("/"); // navigate after logout
+      logout(); //token clears
+      navigate("/"); 
     } catch (err) {
       console.error("Logout failed:", err);
     }

@@ -8,7 +8,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--bg-color); /* theme color */
+  background: var(--bg-color); 
   color: white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 0 0 15px 15px;
@@ -37,7 +37,7 @@
   color: white;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out;
 }
 
 .logout-btn:hover {

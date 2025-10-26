@@ -26,11 +26,9 @@ const MetaManager = ({ token, subsection }) => {
   const [showBranchModal, setShowBranchModal] = useState(false);
   const [showSubjectModal, setShowSubjectModal] = useState(false);
 
-  // ==================== DELETE MODAL STATE ====================
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [deleteItem, setDeleteItem] = useState(null); // { type, name, id }
+  const [deleteItem, setDeleteItem] = useState(null); // type, name, id
 
-  // ==================== FETCH DATA ====================
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -74,7 +72,6 @@ const MetaManager = ({ token, subsection }) => {
     fetchData();
   }, []);
 
-  // ==================== DELETE HANDLERS ====================
   const handleDeleteClick = (type, item) => {
     setDeleteItem({ type, name: item.name, id: item._id });
     setShowDeleteModal(true);
@@ -95,7 +92,6 @@ const MetaManager = ({ token, subsection }) => {
     }
   };
 
-  // ==================== DUPLICATION CHECK ====================
   const isDuplicateRegulation = (item) =>
     regulations.some(
       (r) =>
@@ -127,7 +123,6 @@ const MetaManager = ({ token, subsection }) => {
         s._id !== item._id
     );
 
-  // ==================== EDIT SAVE ====================
   const handleEditSave = async () => {
     if (!editItem) return;
 
@@ -170,7 +165,6 @@ const MetaManager = ({ token, subsection }) => {
     }
   };
 
-  // ==================== FILTERS ====================
   const handleClearFilters = () => {
     setSelectedReg("");
     setSelectedBranch("");
@@ -193,12 +187,11 @@ const MetaManager = ({ token, subsection }) => {
   if (loading) return <p>Loading {subsection}...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
-  // ==================== RENDER ====================
   return (
     <div className="meta-manager">
       <h2>{subsection.charAt(0).toUpperCase() + subsection.slice(1)}</h2>
 
-      {/* ---------------- REGULATIONS ---------------- */}
+      {/* regs */}
       {subsection === "regulations" && (
         <div>
           <button className="add-btn" onClick={() => setShowRegModal(true)}>
@@ -242,7 +235,7 @@ const MetaManager = ({ token, subsection }) => {
         </div>
       )}
 
-      {/* ---------------- BRANCHES ---------------- */}
+      {/* branches*/}
       {subsection === "branches" && (
         <div>
           <button className="add-btn" onClick={() => setShowBranchModal(true)}>
@@ -313,7 +306,7 @@ const MetaManager = ({ token, subsection }) => {
         </div>
       )}
 
-      {/* ---------------- SUBJECTS ---------------- */}
+      {/* subs */}
       {subsection === "subjects" && (
         <div>
           <button className="add-btn" onClick={() => setShowSubjectModal(true)}>
@@ -449,7 +442,7 @@ const MetaManager = ({ token, subsection }) => {
         </div>
       )}
 
-      {/* ==================== ADD MODALS ==================== */}
+      {/* add modal*/}
       {showRegModal && (
         <AddRegulationModal
           token={token}
@@ -478,7 +471,7 @@ const MetaManager = ({ token, subsection }) => {
         />
       )}
 
-      {/* ==================== EDIT MODAL ==================== */}
+      {/* edit modal */}
       {editItem && (
         <div className="edit-modal-overlay">
           <div className="edit-modal-content">
@@ -578,7 +571,7 @@ const MetaManager = ({ token, subsection }) => {
         </div>
       )}
 
-      {/* ==================== DELETE CONFIRMATION MODAL ==================== */}
+      {/*del modal */}
       {showDeleteModal && deleteItem && (
         <div className="edit-modal-overlay">
           <div className="edit-modal-content">

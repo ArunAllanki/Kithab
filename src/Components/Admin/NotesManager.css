@@ -1,4 +1,4 @@
-NotesManager.css
+
 .notes-manager-container {
   padding: 1.5rem;
 }
@@ -50,7 +50,6 @@ NotesManager.css
   margin-top: 0.5rem;
 }
 
-/* Modal styles */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -88,4 +87,13 @@ NotesManager.css
   border: none;
   cursor: pointer;
   border-radius: 4px;
+}
+
+.clickable{
+  color: var(--third-color);
+  cursor: pointer;
+}
+
+.faculty-dets-modal{
+  text-align: left;
 }

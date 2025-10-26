@@ -1,4 +1,3 @@
-// src/Components/Admin/AddRegulationModal.jsx
 import { useState, useEffect } from "react";
 import API from "../../services/api";
 
@@ -10,7 +9,6 @@ const AddRegulationModal = ({ token, onClose, onSuccess }) => {
   const [existingRegs, setExistingRegs] = useState([]);
 
   useEffect(() => {
-    // fetch existing regulations for duplication check
     const fetchRegs = async () => {
       try {
         const res = await API.get("/admin/regulations", {
@@ -18,7 +16,6 @@ const AddRegulationModal = ({ token, onClose, onSuccess }) => {
         });
         setExistingRegs(res.data || []);
       } catch (err) {
-        // silent - duplication check will still work conservatively on submit (server-side)
         console.error("Failed to fetch regs for modal:", err);
       }
     };
@@ -58,7 +55,6 @@ const AddRegulationModal = ({ token, onClose, onSuccess }) => {
       onSuccess?.();
       onClose?.();
     } catch (err) {
-      // show server error inline if present
       const msg = err.response?.data?.message || "Failed to add regulation";
       setErrors({ server: msg });
     } finally {

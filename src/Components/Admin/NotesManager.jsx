@@ -149,7 +149,6 @@ const NotesManager = () => {
     }
   };
 
-  // ===== Download note file =====
   const downloadNote = async (noteId, filename, contentType) => {
     try {
       const response = await API.get(`/admin/notes/${noteId}/file`, {
@@ -175,7 +174,6 @@ const NotesManager = () => {
     }
   };
 
-  // ===== Delete flow =====
   const handleDeleteClick = (note) => {
     setNoteToDelete(note);
     setShowDeleteModal(true);
@@ -200,19 +198,16 @@ const NotesManager = () => {
     }
   };
 
-  // Reset notes & search when filters change
   useEffect(() => {
     setNotes([]);
     setSearchPerformed(false);
   }, [selectedRegulation, selectedBranch, selectedSemester, selectedSubject]);
 
-  // ===== Faculty modal =====
   const handleFacultyClick = (faculty) => {
     setSelectedFaculty(faculty || null);
     setShowFacultyModal(true);
   };
 
-  // ===== Clear all filters =====
   const clearFilters = () => {
     setSelectedRegulation("");
     setSelectedBranch("");
@@ -223,15 +218,12 @@ const NotesManager = () => {
     setError("");
   };
 
-  // ===== Check if all filters selected =====
   const allFiltersSelected =
     selectedRegulation && selectedBranch && selectedSemester && selectedSubject;
 
   return (
     <div className="notes-manager-container">
       <h2>Notes Manager (Admin)</h2>
-
-      {/* ===== Filters ===== */}
       <div className="filters">
         <select
           value={selectedRegulation}
@@ -299,7 +291,7 @@ const NotesManager = () => {
         <button
           className="add-btn"
           onClick={fetchNotes}
-          disabled={!allFiltersSelected} // disabled if filters incomplete
+          disabled={!allFiltersSelected}
         >
           Get Notes
         </button>
@@ -311,7 +303,6 @@ const NotesManager = () => {
 
       {error && <p className="error-msg">{error}</p>}
 
-      {/* ===== Notes Table ===== */}
       <div className="table-container">
         {loadingNotes ? (
           <p>Loading notes...</p>
@@ -361,7 +352,6 @@ const NotesManager = () => {
         ) : null}
       </div>
 
-      {/* ===== Delete Modal ===== */}
       {showDeleteModal && (
         <div className="modal-overlay">
           <div className="modal">
@@ -388,28 +378,29 @@ const NotesManager = () => {
           </div>
         </div>
       )}
-
-      {/* ===== Faculty Modal ===== */}
+      {/* faculty modal */}
       {showFacultyModal && selectedFaculty && (
         <div className="modal-overlay">
           <div className="modal">
-            <h3>Faculty Details</h3>
-            <p>
-              <b>Name:</b> {selectedFaculty.name || "—"}
-            </p>
-            <p>
-              <b>Email:</b> {selectedFaculty.email || "—"}
-            </p>
-            <p>
-              <b>Employee ID:</b> {selectedFaculty.employeeId || "—"}
-            </p>
-            <p>
-              <b>Designation:</b> {selectedFaculty.designation || "—"}
-            </p>
-            <p>
-              <b>Uploaded Notes:</b>{" "}
-              {selectedFaculty.uploadedNotes?.length ?? "—"}
-            </p>
+            <h2>Faculty Details</h2>
+            <div className="faculty-dets-modal">
+              <p>
+                <b>Name:</b> {selectedFaculty.name || "—"}
+              </p>
+              <p>
+                <b>Email:</b> {selectedFaculty.email || "—"}
+              </p>
+              <p>
+                <b>Employee ID:</b> {selectedFaculty.employeeId || "—"}
+              </p>
+              <p>
+                <b>Designation:</b> {selectedFaculty.designation || "—"}
+              </p>
+              <p>
+                <b>Uploaded Notes:</b>{" "}
+                {selectedFaculty.uploadedNotes?.length ?? "—"}
+              </p>
+            </div>
             <div className="modal-actions">
               <button onClick={() => setShowFacultyModal(false)}>Close</button>
             </div>

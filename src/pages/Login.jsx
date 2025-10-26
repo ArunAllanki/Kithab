@@ -14,7 +14,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const [showForgotModal, setShowForgotModal] = useState(false);
-  const [forgotRole, setForgotRole] = useState("");
+  const [forgotRole, setForgotRole] = useState("faculty");
   const [forgotId, setForgotId] = useState("");
   const [forgotMessage, setForgotMessage] = useState("");
   const [forgotLoading, setForgotLoading] = useState(false);
@@ -135,7 +135,7 @@ const Login = () => {
                 }
               }}
             >
-              <select
+              {/* <select
                 value={forgotRole}
                 onChange={(e) => setForgotRole(e.target.value)}
                 required
@@ -143,13 +143,14 @@ const Login = () => {
                 <option value="">Select Role</option>
                 <option value="student">Student</option>
                 <option value="faculty">Faculty</option>
-              </select>
-
+              </select> */}
+              
               <input
                 type="text"
-                placeholder={
-                  forgotRole === "faculty" ? "Employee ID" : "Roll Number"
-                }
+                placeholder="Emplyee ID"
+                // {
+                //   forgotRole === "faculty" ? "Employee ID" : "Roll Number"
+                // }
                 value={forgotId}
                 onChange={(e) => setForgotId(e.target.value)}
                 required
@@ -160,7 +161,7 @@ const Login = () => {
                   {forgotLoading ? (
                     <span className="spinner" />
                   ) : (
-                    "Send Reset Link"
+                    "Reset"
                   )}
                 </button>
                 <button

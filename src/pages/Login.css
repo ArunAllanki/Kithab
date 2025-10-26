@@ -1,11 +1,9 @@
-/* Global variables */
 :root {
   --main-gradient: linear-gradient(#fab458, #e29127, black);
   --success-color: #27ae60;
   --error-color: #e74c3c;
 }
 
-/* Body & html */
 html,
 body {
   margin: 0;
@@ -26,7 +24,6 @@ body {
   }
 }
 
-/* Background balls */
 .background {
   position: fixed;
   width: 100vw;
@@ -118,7 +115,6 @@ body {
   box-shadow: 40vmin 0 5.1vmin currentColor;
 }
 
-/* Wrapper */
 .login-wrapper {
   display: flex;
   min-width: 100vw;
@@ -137,22 +133,20 @@ body {
   margin-bottom: 1rem;
 }
 
-/* Form container scrollable with hidden scrollbar */
 .form-container {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow-y: auto;
-  -ms-overflow-style: none; /* IE, Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .form-container::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  display: none;
 }
 
-/* Form styling */
 .form {
   background-color: white;
   box-shadow: 0 8px 15px 0 rgba(103, 104, 109, 0.37);
@@ -170,7 +164,6 @@ body {
   margin: 10vh;
 }
 
-/* Tabs */
 .form-tabs {
   display: flex;
   justify-content: center;
@@ -197,7 +190,6 @@ body {
   border-radius: 2px;
 }
 
-/* Inputs & dropdown */
 input,
 select {
   background: var(--bg-color, #f0f0f0);
@@ -224,7 +216,6 @@ select {
   padding-right: 2rem;
 }
 
-/* Validation error messages */
 .reg-error {
   color: red;
   font-size: 0.85rem;
@@ -232,7 +223,6 @@ select {
   align-self: flex-start;
 }
 
-/* Backend registration response message */
 .register-message {
   margin: 10px 0;
   font-weight: 500;
@@ -247,7 +237,6 @@ select {
   color: var(--error-color);
 }
 
-/* Button */
 button {
   padding: 10px;
   border: none;
@@ -265,7 +254,6 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* Spinner inside button */
 .spinner {
   width: 16px;
   height: 16px;
@@ -286,7 +274,6 @@ button:disabled {
   }
 }
 
-/* Forgot password link */
 .forgot-link {
   font-size: 0.9rem;
   text-align: right;
@@ -303,7 +290,6 @@ button:disabled {
   color: #217fbe;
 }
 
-/* Illustration */
 .illustration {
   flex: 1;
   background-image: url("../Assets/ReadingBookBlue.svg");
@@ -312,7 +298,6 @@ button:disabled {
   background-position: center;
 }
 
-/* Responsive */
 @media screen and (max-width: 768px) {
   .login-wrapper {
     display: flex;
@@ -341,8 +326,6 @@ button:disabled {
   }
 }
 
-/* Keep all previous styles exactly the same... */
-
 /* Wrapper */
 /* .login-wrapper {
   display: flex;
@@ -358,18 +341,17 @@ button:disabled {
   justify-content: center;
   align-items: center;
   overflow-y: auto;
-  
-  -ms-overflow-style: none; /* IE, Edge */
-  scrollbar-width: none; /* Firefox */
-  padding: 2vh 0; /* Added padding for mobile scroll */
-  max-height: 100vh; /* Ensure it never overflows viewport */
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding: 2vh 0;
+  max-height: 100vh;
 }
 
 .form-container::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  display: none;
 }
 
-/* Wrap all form fields in a scrollable wrapper to fix mobile scrolling */
 .form-fields-wrapper {
   width: 100%;
   display: flex;
@@ -377,8 +359,6 @@ button:disabled {
   overflow-y: auto;
 }
 
-/* Keep all other styles intact (form, inputs, buttons, balls, illustration, media queries, etc.) */
-/* Modal backdrop */
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -392,7 +372,6 @@ button:disabled {
   z-index: 1000;
 }
 
-/* Modal content */
 .modal {
   background: white;
   padding: 2rem;
@@ -404,26 +383,23 @@ button:disabled {
   flex-direction: column;
 }
 
-/* Disable background scroll when modal is open */
 body.modal-open {
   overflow: hidden;
 }
 
-/* Modal buttons horizontal layout */
 .modal-btn-group {
   display: flex;
-  justify-content: space-between; /* Side by side */
-  gap: 10px; /* spacing between buttons */
+  justify-content: space-between;
+  gap: 10px;
   margin-top: 1rem;
 }
 
 .modal-btn-group button {
-  flex: 1; /* Equal width buttons */
+  flex: 1;
 }
 
-/* Modal max-width */
 .modal {
-  max-width: 400px; /* Added max-width without breaking existing styles */
+  max-width: 400px;
   width: 90%;
   padding: 2rem;
   background-color: white;

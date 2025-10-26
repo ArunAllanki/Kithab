@@ -20,11 +20,11 @@ const FacultyDashboard = () => {
   const [files, setFiles] = useState([]);
 
   const [uploads, setUploads] = useState([]);
-  const [loading, setLoading] = useState(false); // for upload button
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!token || user.role !== "faculty") {
-      navigate("/login"); // ✅ Redirects to /login instead of /
+      navigate("/login");
       return;
     }
 
@@ -118,7 +118,7 @@ const FacultyDashboard = () => {
       if (err.response?.status === 401) {
         alert("Session expired. Please login again.");
         logout();
-        navigate("/login"); // ✅ Redirects to /login instead of /
+        navigate("/login");
       } else {
         alert("Upload failed. Try again.");
       }

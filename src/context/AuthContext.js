@@ -1,6 +1,5 @@
-// src/context/AuthContext.js
 import { createContext, useState, useEffect } from "react";
-import { jwtDecode } from "jwt-decode"; // v3+ syntax
+import { jwtDecode } from "jwt-decode";
 
 export const AuthContext = createContext();
 
@@ -10,13 +9,12 @@ export const AuthProvider = ({ children }) => {
   );
   const [token, setToken] = useState(sessionStorage.getItem("token") || null);
 
-  // Auto logout when token expires
   useEffect(() => {
     if (!token || !user) return;
 
     try {
       const decoded = jwtDecode(token);
-      const expTime = decoded.exp * 1000; // exp in seconds → ms
+      const expTime = decoded.exp * 1000;
       const now = Date.now();
 
       if (expTime <= now) {
@@ -41,18 +39,13 @@ export const AuthProvider = ({ children }) => {
     let endpoint = "";
     let body = {};
 
-    // ---------- ADMIN ----------
     if (id === process.env.REACT_APP_ADMIN_ID) {
       endpoint = "admin/login";
       body = { adminId: id, password };
-    }
-    // ---------- FACULTY ----------
-    else if (id.startsWith("FAC")) {
+    } else if (id.startsWith("FAC")) {
       endpoint = "faculty/login";
       body = { employeeId: id, password };
-    }
-    // ---------- STUDENT ----------
-    else {
+    } else {
       endpoint = "student/login";
       body = { rollNumber: id, password };
     }
@@ -73,7 +66,6 @@ export const AuthProvider = ({ children }) => {
         endpoint === "admin/login" ? "admin" : endpoint.split("/")[0];
       const userData = data[userKey];
 
-      // Save to sessionStorage
       setUser(userData);
       setToken(data.token);
       sessionStorage.setItem("user", JSON.stringify(userData));

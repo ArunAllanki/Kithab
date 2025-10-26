@@ -74,7 +74,7 @@ const StudentDashboard = () => {
       console.error(err);
       setFilteredNotes([]);
       setSearchDone(true);
-      alert("Failed to fetch notes.");
+      // alert("Failed to fetch notes.");
     } finally {
       setLoading(false);
     }
@@ -103,9 +103,9 @@ const StudentDashboard = () => {
   return (
     <div className="SD-container">
       <header className="header">
-        <img className="rce" src={logo} alt="Kithab-logo" />
-        {/* <div className="line"></div> */}
-          <div className="logo-separator"></div>
+        {/* <img className="rce" src={logo} alt="Kithab-logo" />
+        <div className="line"></div>
+          <div className="logo-separator"></div> */}
 
         <img className="kithab" src={logo} alt="Kithab-logo" />
       </header>

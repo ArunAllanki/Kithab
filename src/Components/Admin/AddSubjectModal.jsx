@@ -34,7 +34,6 @@ const AddSubjectModal = ({
     if (!name.trim()) e.name = "Subject name is required";
     if (!code.trim()) e.code = "Subject code is required";
 
-    // duplication check: same name/code in branch+semester
     const sameBranchSem = subjects.filter(
       (s) =>
         String(s.branch) === branchId && Number(s.semester) === Number(semester)

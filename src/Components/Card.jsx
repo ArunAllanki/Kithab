@@ -7,12 +7,10 @@ const Card = ({ note, backend, user, token, onFavUpdate }) => {
   const [viewing, setViewing] = useState(false);
   const [isFav, setIsFav] = useState(false);
 
-  // Set initial favorite state safely
   useEffect(() => {
     setIsFav(user?.favoriteNotes?.includes(note._id) ?? false);
   }, [user, note._id]);
 
-  // Download file
   const handleDownload = async () => {
     try {
       setDownloading(true);
@@ -39,7 +37,6 @@ const Card = ({ note, backend, user, token, onFavUpdate }) => {
     }
   };
 
-  // View file in new tab
   const handleView = async () => {
     try {
       setViewing(true);
@@ -49,7 +46,6 @@ const Card = ({ note, backend, user, token, onFavUpdate }) => {
       if (!res.ok) throw new Error("Failed to fetch file for viewing");
       const blob = await res.blob();
 
-      // Determine MIME type fallback
       const extension = note.filename?.split(".").pop().toLowerCase();
       let mime = blob.type;
       if (!mime || mime === "application/octet-stream") {
@@ -72,41 +68,36 @@ const Card = ({ note, backend, user, token, onFavUpdate }) => {
     }
   };
 
-  const toggleFavourite = async () => {
-    try {
-      const method = isFav ? "DELETE" : "POST";
-      const res = await fetch(`${backend}/notes/${note._id}/favorite`, {
-        method,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-      if (!res.ok) throw new Error("Failed to update favourite");
-      const data = await res.json();
-      setIsFav(!isFav);
-      if (onFavUpdate) onFavUpdate(data.favoriteNotes);
-    } catch (err) {
-      console.error(err);
-      alert("Could not update favourite status");
-    }
-  };
+  // const toggleFavourite = async () => {
+  //   try {
+  //     const method = isFav ? "DELETE" : "POST";
+  //     const res = await fetch(`${backend}/notes/${note._id}/favorite`, {
+  //       method,
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+  //     if (!res.ok) throw new Error("Failed to update favourite");
+  //     const data = await res.json();
+  //     setIsFav(!isFav);
+  //     if (onFavUpdate) onFavUpdate(data.favoriteNotes);
+  //   } catch (err) {
+  //     console.error(err);
+  //     alert("Could not update favourite status");
+  //   }
+  // };
 
   return (
     <li className="note-card">
       <div className="note-info">
-        <div className="title-row">
           <strong className="title">{note.title}</strong>
-          {/* <span className="fav-icon" onClick={toggleFavourite}>
-            {isFav ? <FaStar color="#FFD700" /> : <FaRegStar />}
-          </span> */}
-        </div>
-        <p>Regulation: {note.regulation?.name}</p>
+        {/* <p>Regulation: {note.regulation?.name}</p>
         <p>Branch: {note.branch?.name}</p>
         <p>
           Subject: {note.subject?.name} ({note.subject?.code})
         </p>
-        <p>Semester: {note.semester}</p>
+        <p>Semester: {note.semester}</p> */}
         <p className="metaData">
           Uploaded by <strong>{note.uploadedBy?.name || "Unknown"}</strong> on{" "}
           <strong>{new Date(note.createdAt).toLocaleDateString()}</strong>

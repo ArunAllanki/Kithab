@@ -20,7 +20,7 @@ const AddBranchModal = ({
     if (!name.trim()) e.name = "Branch name is required";
     if (!code.trim()) e.code = "Branch code is required";
 
-    // Check duplication in selected regulation
+
     const sameRegBranches = branches.filter(
       (b) => String(b.regulation?._id || b.regulation) === regulationId
     );

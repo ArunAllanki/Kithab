@@ -1,4 +1,3 @@
-// src/pages/AdminDashboard.jsx
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -16,11 +15,10 @@ const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [activeSubsection, setActiveSubsection] = useState("");
 
-  // Redirect if token invalid or user not admin
   useEffect(() => {
     if (!token || user?.role !== "admin") {
-      logout(); // clear localStorage
-      navigate("/login"); // safe redirect inside <Router>
+      logout();
+      navigate("/login");
     }
   }, [token, user, logout, navigate]);
 
@@ -31,7 +29,7 @@ const AdminDashboard = () => {
 
   const handleLogout = () => {
     logout();
-    navigate("/login"); // no alert
+    navigate("/login");
   };
 
   const renderContent = () => {

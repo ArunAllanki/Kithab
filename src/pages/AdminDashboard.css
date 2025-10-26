@@ -60,7 +60,6 @@
   background-color: #2a2a3d;
 }
 
-/* Sublist */
 .sidebar-sublist {
   list-style: none;
   padding-left: 20px;
@@ -88,7 +87,6 @@
   background-color: #2f2f4b;
 }
 
-/* Logout */
 .sidebar-logout {
   margin-top: auto;
   padding: 12px 20px;
@@ -107,9 +105,6 @@
   background-color: #ff7875;
 }
 
-/* =============================
-   Dashboard Content
-============================= */
 .dashboard-content {
   flex: 1;
   display: flex;
@@ -121,7 +116,6 @@
   width: calc(100% - 260px);
 }
 
-/* Optional sticky header section */
 .dashboard-header {
   position: sticky;
   top: 0;
@@ -139,7 +133,6 @@
   margin: 0;
 }
 
-/* Card or content wrapper style (optional but good UI) */
 .dashboard-card {
   background: #ffffff;
   border-radius: 8px;
@@ -148,7 +141,6 @@
   margin-bottom: 1.5rem;
 }
 
-/* Scrollbar */
 .dashboard-content::-webkit-scrollbar {
   width: 8px;
 }
@@ -166,9 +158,6 @@
   background-color: #a0a0a0;
 }
 
-/* =============================
-   Responsive
-============================= */
 @media (max-width: 768px) {
   .sidebar {
     width: 200px;

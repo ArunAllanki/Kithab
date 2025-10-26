@@ -1,7 +1,6 @@
-/* ===== Modal Error Message ===== */
 .field-error {
-  color: #d93025; /* red color for error */
-  background-color: #fce8e6; /* light red/pink background */
+  color: #d93025;
+  background-color: #fce8e6;
   border: 1px solid #f5c2c0;
   padding: 0.5rem 1rem;
   margin-bottom: 1rem;

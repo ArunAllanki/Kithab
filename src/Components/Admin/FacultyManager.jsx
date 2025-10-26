@@ -32,7 +32,6 @@ const FacultyManager = () => {
   const [uploads, setUploads] = useState([]);
   const [uploadsLoading, setUploadsLoading] = useState(false);
 
-  // ===== Fetch Faculty =====
   const fetchFaculty = async () => {
     setLoading(true);
     try {
@@ -52,14 +51,12 @@ const FacultyManager = () => {
     if (token) fetchFaculty();
   }, [token]);
 
-  // ===== Input change =====
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  // ===== Form validation =====
   const validateForm = (isAdd = false) => {
     const { employeeId, name, email, designation, password, confirmPassword } =
       formData;
@@ -81,7 +78,7 @@ const FacultyManager = () => {
         newErrors.password = "Password must be at least 6 characters";
     }
 
-    // Frontend duplicates
+    //checking dups in frontnd
     const emailExists = facultyList.some(
       (f) =>
         f.email === email && (!selectedFaculty || f._id !== selectedFaculty._id)
@@ -99,7 +96,6 @@ const FacultyManager = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // ===== Add Faculty =====
   const handleAddFaculty = async () => {
     if (!validateForm(true)) return;
     setSubmitting(true);
@@ -120,7 +116,6 @@ const FacultyManager = () => {
     }
   };
 
-  // ===== Edit Faculty =====
   const handleEditFaculty = async () => {
     if (!validateForm(false)) return;
     setSubmitting(true);
@@ -150,7 +145,6 @@ const FacultyManager = () => {
     }
   };
 
-  // ===== Delete Faculty =====
   const handleDeleteFaculty = async () => {
     if (!selectedFaculty) return;
     setSubmitting(true);
@@ -169,7 +163,6 @@ const FacultyManager = () => {
     }
   };
 
-  // ===== Fetch Uploads =====
   const fetchUploads = async (facultyId) => {
     setUploadsLoading(true);
     try {
@@ -215,12 +208,10 @@ const FacultyManager = () => {
   return (
     <div className="faculty-manager-container">
       <h2>Faculty Manager (Admin)</h2>
-
       <button className="add-btn" onClick={openAddModal}>
         Add Faculty
       </button>
       {error && <p className="error-msg">{error}</p>}
-
       <div className="table-container">
         {loading ? (
           <p>Loading faculty...</p>
@@ -273,8 +264,7 @@ const FacultyManager = () => {
           </table>
         )}
       </div>
-
-      {/* ADD Modal */}
+      {/* add modal */}
       {showAddModal && (
         <div className="modal-overlay">
           <div className="modal">
@@ -360,8 +350,7 @@ const FacultyManager = () => {
           </div>
         </div>
       )}
-
-      {/* EDIT Modal */}
+      {/* modal edit */}
       {showEditModal && selectedFaculty && (
         <div className="modal-overlay">
           <div className="modal">
@@ -448,8 +437,7 @@ const FacultyManager = () => {
           </div>
         </div>
       )}
-
-      {/* DELETE Modal */}
+      {/* delete modl */}
       {showDeleteModal && selectedFaculty && (
         <div className="modal-overlay">
           <div className="modal">
@@ -475,8 +463,7 @@ const FacultyManager = () => {
           </div>
         </div>
       )}
-
-      {/* UPLOADS Modal */}
+      /*upload modal */
       {showUploadsModal && selectedFaculty && (
         <div className="modal-overlay">
           <div className="modal">
