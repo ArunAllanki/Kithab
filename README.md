@@ -1,70 +1,158 @@
-# Getting Started with Create React App
+# 🧾 Kithab — Academic Notes Management Platform  
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Kithab** is a full-stack (MERN) web platform that streamlines how **students access**, **faculties upload**, and **admins manage** academic notes.  
+It provides a clean hierarchical filtering structure — *Regulation → Branch → Semester → Subject* — ensuring organized storage, quick search, and efficient administration.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🚀 Overview  
 
-### `npm start`
+Kithab connects **Students**, **Faculty**, and **Admins** under one structured platform for digital note sharing.  
+It focuses on three core workflows:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. **Students** can search and download notes based on filters.  
+2. **Faculties** can upload and manage their own notes.  
+3. **Admins** can control regulations, branches, subjects, faculties, and oversee all uploaded content.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+JWT-based authentication ensures secure access, with automatic logout upon token expiry.
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🧭 Main Pages & Features  
 
-### `npm run build`
+### 🧑‍🎓 Student Notes Page (Main Front Page)
+> The central part of Kithab — used by students.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Dynamic Hierarchical Filtering:**  
+  Students filter notes step-by-step:  
+  - Select *Regulation → Branch → Semester → Subject*  
+  - The next dropdown dynamically loads based on previous selection.  
+- **Instant Results:**  
+  Once filters are selected, all matching notes are displayed in a responsive table or card view.  
+- **View / Download Notes:**  
+  Students can preview note details (title, faculty name, uploaded date) and download the file directly.  
+- **On-Demand Fetching:**  
+  The actual file is fetched only when downloaded (not during list rendering), ensuring fast loading.  
+- **Clear Filters Button:**  
+  Resets all dropdowns to default to start a fresh search.  
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 👨‍🏫 Faculty Dashboard
+> Accessible after faculty login.
 
-### `npm run eject`
+- **Upload Notes:**  
+  Faculty select *Regulation, Branch, Semester, Subject*, add a title, and upload their note file.  
+- **My Notes List:**  
+  Displays all notes uploaded by that faculty with options to:
+  - **Download** (fetches file on-demand)
+  - **Delete**
+- **Filtered Listing:**  
+  Faculty can filter their uploads by subject/semester.
+- **JWT Authentication:**  
+  Faculty session expires automatically after token validity ends — ensuring secure access.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 🧑‍💼 Admin Dashboard
+> Accessible only to Admin role; divided into three major sections.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+#### 📚 Meta Manager (Regulations / Branches / Subjects)
+- **Manage Hierarchy:**  
+  Admin can create, edit, or delete:
+  - Regulations
+  - Branches (linked to Regulations)
+  - Subjects (linked to Branch + Semester)
+- **Cascading Deletions (Transaction-based):**  
+  - Deleting a *Regulation* removes all its *Branches, Subjects,* and *Notes*.
+  - Deleting a *Branch* removes its *Subjects* and *Notes*.
+  - Deletion is handled inside a MongoDB transaction — ensuring atomic consistency (either all delete or none if an error occurs).
+- **UI Features:**  
+  Each section has:
+  - Add/Edit modals  
+  - Confirmation before delete  
+  - Timestamps for tracking creation/updates  
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+#### 📂 Notes Manager (Admin View)
+- **View All Notes:**  
+  Displays every note uploaded by all faculties.
+- **Filter Controls:**  
+  Admin must select all filters (*Regulation → Branch → Semester → Subject*) before the **Get Notes** button is enabled.  
+- **Clear Filters Button:**  
+  Instantly resets all filter selections.  
+- **Download / Delete:**  
+  Admin can download or permanently delete any uploaded note.
+- **Faculty Info Popups:**  
+  Clicking “Uploaded by” shows details about the faculty who uploaded that note.
 
-## Learn More
+#### 👥 Faculty Manager
+- **Monitor & Manage Faculty Accounts:**  
+  Admin can view all registered faculty accounts in a table view with details like name, email, branch, and subjects handled.  
+- **Add Faculty:**  
+  Provides a form to create a new faculty account with credentials and role assignment.  
+- **Edit Faculty Info:**  
+  Allows admin to update faculty details such as name, email, or associated branch.  
+- **Delete Faculty:**  
+  Removes faculty accounts that are inactive or no longer associated.  
+- **Search & Filter Options:**  
+  Admin can quickly search faculties by name, branch, or email for efficient management.  
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Authentication System  
 
-### Code Splitting
+- **JWT-Based Authentication:**  
+  - Both Faculty and Admin logins return JWT tokens.
+  - Tokens are stored securely in frontend context (not in localStorage for safety).  
+  - Tokens auto-expire, and the user is automatically logged out upon expiry.  
+- **Role-Based Routing:**  
+  - Admins and Faculties see separate dashboards after login.  
+  - Students don’t need authentication for searching and downloading public notes.  
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+---
 
-### Analyzing the Bundle Size
+## Tech Stack  
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+**Frontend:** React, React Router, Context API, Axios  
+**Backend:** Node.js, Express.js, Mongoose (MongoDB)  
+**Database:** MongoDB  
+**Authentication:** JWT (JSON Web Tokens)  
+**File Handling:** Binary file upload using MongoDB Buffer storage  
 
-### Making a Progressive Web App
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Data Model Overview  
 
-### Advanced Configuration
+**Core Collections:**
+- Regulation  
+- Branch (linked to Regulation)  
+- Subject (linked to Branch + Semester)  
+- Note (linked to Regulation, Branch, Subject, Faculty)  
+- Faculty (for authentication)  
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Relationships are designed to ensure structured access and safe cascading deletions.
 
-### Deployment
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Smart Backend Logic  
 
-### `npm run build` fails to minify
+- **Transactional Deletions:**  
+  When Admin deletes a regulation/branch, all linked data is deleted atomically using MongoDB transactions.
+- **Optimized File Fetch:**  
+  Notes’ actual binary data is excluded from initial queries and only fetched when the user clicks download.
+- **Error Handling:**  
+  All backend routes use structured try/catch blocks with meaningful responses.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+
+## Repositories  
+
+- **Frontend:** [Kithab (Client)](https://github.com/ArunAllanki/Kithab)  
+- **Backend:** [Kithab Backend (Server)](https://github.com/ArunAllanki/KithabBackend)
+
+---
+
+## Summary  
+
+Kithab is a modern, scalable solution for managing and sharing academic notes — blending structured hierarchy, secure authentication, and user-friendly filtering.  
+It allows seamless collaboration between faculty, students, and administrators — ensuring that learning materials are always accessible, organized, and well-maintained.

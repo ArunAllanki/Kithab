@@ -463,7 +463,7 @@ const FacultyManager = () => {
           </div>
         </div>
       )}
-      /*upload modal */
+      {/*upload modal */}
       {showUploadsModal && selectedFaculty && (
         <div className="modal-overlay">
           <div className="modal">
